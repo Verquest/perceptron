@@ -1,11 +1,8 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.stream.Collectors;
 
-public class Vector {
-    private ArrayList<Double> vals;
+public class Vector implements Comparable<Vector>{
+    public ArrayList<Double> vals;
 
     public Vector(double... values) {
         vals = new ArrayList<>();
@@ -17,38 +14,61 @@ public class Vector {
         for(double d: values)
             vals.add(d);
     }
+    public Vector(Vector v) {
+        vals = new ArrayList<>();
+        for(double d: v.vals)
+            vals.add(d);
+    }
 
     public void normalize(){
         ArrayList<Double> valsSquared = new ArrayList<>(vals);
-        for(double d: valsSquared){
-            d = d*d;
+
+        for(int i = 0; i < valsSquared.size(); i++){
+            valsSquared.set(i, valsSquared.get(i)*valsSquared.get(i));
         }
-        System.out.println("pow " + this);
+
+        double sum = valsSquared.stream().mapToDouble(Double::doubleValue).sum();
         double value = valsSquared.stream().mapToDouble(x -> x).sum();
-        System.out.println("sum " + value);
-        double squareRooted = Math.sqrt(value);
-        System.out.println("sqrt " + squareRooted);
-        vals.stream().mapToDouble(x -> x/squareRooted);
+        double squareRooted = Math.sqrt(sum);
+
+        for(int i = 0; i < vals.size(); i++){
+            vals.set(i, vals.get(i)/squareRooted);
+        }
     }
 
-    public double multiply(Vector vector){
-        ArrayList<Double> values = new ArrayList<>();
-        if(vector.getSize()==this.getSize()){
-            for(int i = 0; i < vector.getSize(); i++){
-                values.add(vector.getVals().get(i)* this.getVals().get(i));
-            }
+    public double dotProduct(Vector vector){
+        double sum = 0;
+        for(int i = 0; i < vector.getSize(); i++){
+            sum += vector.getVals().get(i) * vals.get(i);
         }
-        return values.stream().mapToDouble(Double::doubleValue).sum();
+
+        return sum;
     }
+    //multiply
     public ArrayList<Double> getVals() {
         return vals;
     }
     public int getSize(){
         return vals.size();
     }
+    public double get(int n){
+        return vals.get(n);
+    }
 
+    public void set(int n, double value){
+        vals.set(n, value);
+    }
+    //add a double to all the values
+    public void add(int pos, double value){
+        vals.set(pos, value+vals.get(pos));
+    }
     @Override
     public String toString() {
         return vals.toString();
+    }
+
+    @Override
+    public int compareTo(Vector o) {
+        return o.getVals() == vals ? 1 : 0;
     }
 }

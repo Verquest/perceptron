@@ -1,16 +1,13 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Loader {
     public Loader(){}
-    public HashMap<String, ArrayList<Vector>> load(String path){
-        HashMap<String, ArrayList<Vector>> data = new HashMap<>();
+    public LinkedHashMap<Vector, String> load(String path){
+        LinkedHashMap<Vector, String> data = new LinkedHashMap<>();
         try {
             BufferedReader br = new BufferedReader(new FileReader(path));
             String line;
@@ -19,12 +16,11 @@ public class Loader {
                 String className = lineValues.removeLast();
                 LinkedList<Double> vectorVals = lineValues.stream().map(Double::valueOf).collect(Collectors.toCollection(LinkedList::new));
                 Vector classVector = new Vector(vectorVals);
-                if(data.containsKey(className))
-                    data.get(className).add(classVector);
-                else
-                    data.put(className, new ArrayList<>(Arrays.asList(classVector)));
+                classVector.normalize();
+                if(!data.containsKey(classVector))
+                    data.put(classVector, className);
             }
-        }catch (IOException e){
+        }catch (Exception e){
             e.printStackTrace();
             System.out.println("Error reading training data.");
         }
