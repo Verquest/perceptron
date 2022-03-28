@@ -4,43 +4,24 @@ public class Perceptron {
     private Vector weights;
     private double theta;
     private double learningRate;
-    private int epochs;
-    private HashMap<Vector, String> data;
-    private String activationClassName;
-    private String noActivationClassName;
-    public Perceptron(int size,  int epochs, HashMap<Vector, String> data, double learningRate, double theta) {
+
+    public Perceptron(int size,  double learningRate, double theta) {
         ArrayList<Double> wagi = new ArrayList<>();
         for (int i = 0; i < size ; i++)
             wagi.add(Math.random()*10-5);
-        weights = new Vector(wagi);
 
-        this.epochs = epochs;
-        this.data = data;
+        weights = new Vector(wagi);
         this.learningRate = learningRate;
         this.theta = theta;
-        ArrayList<String> classes = new ArrayList<String>(Arrays.asList(data.values().toArray(new String[0])));
-        classes = new ArrayList<>(new HashSet<>(classes));
-        activationClassName = classes.get(0);
-        noActivationClassName = classes.get(1);
     }
 
-    public void learn(){
-        for (int i = 0; i < epochs; i++){
-            for(Map.Entry<Vector, String> entry: data.entrySet()){
-                String currentClass = entry.getValue();
-                Vector currentVector = entry.getKey();
-                double dotProduct = currentVector.dotProduct(weights);
+    public void learn(Vector toLearn, int expectedValue){
+        double dotProduct = toLearn.dotProduct(weights);
 
-                int correctAnswer = 0;
-                int guess = dotProduct >= theta ? 1 : 0;
+        int guess = dotProduct >= theta ? 1 : 0;
 
-                if(currentClass.equals(activationClassName))
-                    correctAnswer = 1;
-
-                if(guess != correctAnswer){
-                    alterWeights(evaluate(currentVector), correctAnswer, currentVector);
-                }
-            }
+        if(guess != expectedValue){
+            alterWeights(evaluate(toLearn), expectedValue, toLearn);
         }
     }
 
@@ -48,11 +29,11 @@ public class Perceptron {
         return values.dotProduct(weights) >= theta ? 1 : 0;
     }
 
-    public String predict(Vector values){
+    public int predict(Vector values){
         double dotProduct = values.dotProduct(weights);
         System.out.println("dot= " +dotProduct);
         System.out.println("theta= " + theta);
-        return isOvertheta(dotProduct) ? activationClassName: noActivationClassName;
+        return isOvertheta(dotProduct) ? 1: 0;
     }
     public boolean isOvertheta(double val){
         return val > theta;
@@ -69,6 +50,12 @@ public class Perceptron {
         //theta
         theta -= error * learningRate;
         System.out.println("theta = " + theta);
+    }
+    public Vector getWeights(){
+        return weights;
+    }
+    public double getTheta(){
+        return theta;
     }
 }
 

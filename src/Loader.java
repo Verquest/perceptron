@@ -6,8 +6,8 @@ import java.util.stream.Collectors;
 
 public class Loader {
     public Loader(){}
-    public LinkedHashMap<Vector, String> load(String path){
-        LinkedHashMap<Vector, String> data = new LinkedHashMap<>();
+    public HashMap<Vector, String> load(String path){
+        HashMap<Vector, String> data = new HashMap<>();
         try {
             BufferedReader br = new BufferedReader(new FileReader(path));
             String line;
