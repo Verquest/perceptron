@@ -15,11 +15,17 @@ public class Main {
         //learning
         int sampleSize = 25;
         int epochs = 100;
+//        for(int i = 0; i < epochs; i++){
+//            LinkedHashMap<Vector, String> probka = getSubset(scramble(map), sampleSize);
+//            for(Map.Entry<Vector, String> entry: probka.entrySet()){
+//                perceptron.learn(entry.getKey(), entry.getValue().equals(activationClass) ? 1 : 0);
+//            }
+//        }
         for(int i = 0; i < epochs; i++){
-            LinkedHashMap<Vector, String> probka = getSubset(scramble(map), sampleSize);
-            for(Map.Entry<Vector, String> entry: probka.entrySet()){
+            for(Map.Entry<Vector, String> entry: map.entrySet()){
                 perceptron.learn(entry.getKey(), entry.getValue().equals(activationClass) ? 1 : 0);
             }
+            scramble(map);
         }
         //decision
         Scanner scanner = new Scanner(System.in);
