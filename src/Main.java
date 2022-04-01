@@ -3,14 +3,17 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
+        String trainingFile =  "src/training.txt";
+        String testFile =  "src/test.txt";
+        int size = 4;
         Loader loader = new Loader();
-        LinkedHashMap<Vector, String> map = loader.load("src/training.txt");
+        LinkedHashMap<Vector, String> map = loader.load(trainingFile);
 
         ArrayList<String> classes = new ArrayList<>(new HashSet<>(map.values()));
         String activationClass = classes.get(0);
         String noActivationClass = classes.get(1);
 
-        Perceptron perceptron = new Perceptron( 4,   0.5, Math.random()*10-5);
+        Perceptron perceptron = new Perceptron( size,   0.5, Math.random()*10-5);
 
         //learning
         int sampleSize = 25;
@@ -35,7 +38,7 @@ public class Main {
             if (choice == 1) {
                 classify(perceptron, activationClass, noActivationClass);
             } else if (choice == 2) {
-                classifyTestVectors(perceptron, activationClass, noActivationClass);
+                classifyTestVectors(perceptron, activationClass, noActivationClass, testFile);
             }else{
                 perceptron.resetWeights();
                 for(int i = 0; i < epochs; i++){
@@ -66,10 +69,10 @@ public class Main {
         }
         return subset;
     }
-    public static void classifyTestVectors(Perceptron perceptron, String activationClass, String noActivationClass){
+    public static void classifyTestVectors(Perceptron perceptron, String activationClass, String noActivationClass, String testPath){
         Loader loader = new Loader();
         //test set
-        LinkedHashMap<Vector, String> testMap = loader.load("src/test.txt");
+        LinkedHashMap<Vector, String> testMap = loader.load(testPath);
         double testCount = testMap.size();
         double successfulGuesses = 0;
         //testing
