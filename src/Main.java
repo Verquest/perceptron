@@ -13,17 +13,11 @@ public class Main {
         String activationClass = classes.get(0);
         String noActivationClass = classes.get(1);
 
-        Perceptron perceptron = new Perceptron( size,   0.5, Math.random()*10-5);
+        Perceptron perceptron = new Perceptron(size, 0.5, Math.random()*10-5);
 
         //learning
-        int sampleSize = 25;
+        int sampleSize = 50;
         int epochs = 100;
-//        for(int i = 0; i < epochs; i++){
-//            LinkedHashMap<Vector, String> probka = getSubset(scramble(map), sampleSize);
-//            for(Map.Entry<Vector, String> entry: probka.entrySet()){
-//                perceptron.learn(entry.getKey(), entry.getValue().equals(activationClass) ? 1 : 0);
-//            }
-//        }
         for(int i = 0; i < epochs; i++){
             for(Map.Entry<Vector, String> entry: map.entrySet()){
                 perceptron.learn(entry.getKey(), entry.getValue().equals(activationClass) ? 1 : 0);
@@ -61,7 +55,7 @@ public class Main {
         }
         return scrambled;
     }
-    //return a map containing some of the inputed map's entries
+    //return a map containing some of the entries from the given map
     public static LinkedHashMap<Vector, String> getSubset(LinkedHashMap<Vector, String> map, int size){
         LinkedHashMap<Vector, String> subset = new LinkedHashMap<>();
         for(int i = 0; i < size; i++){

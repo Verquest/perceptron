@@ -1,10 +1,10 @@
 import java.util.*;
 
 public class Perceptron {
-    private Vector weights;
+    private final Vector weights;
     private double theta;
-    private double learningRate;
-    private int size;
+    private final double learningRate;
+    private final int size;
     public Perceptron(int size,  double learningRate, double theta) {
         ArrayList<Double> wagi = new ArrayList<>();
         for (int i = 0; i < size ; i++)
@@ -21,19 +21,15 @@ public class Perceptron {
 
         int guess = dotProduct >= theta ? 1 : 0;
 
-        if(guess != expectedValue){
-            alterWeights(evaluate(toLearn), expectedValue, toLearn);
-        }
-    }
+        alterWeights(predict(toLearn), expectedValue, toLearn);
 
-    private int evaluate(Vector values){
-        return values.dotProduct(weights) >= theta ? 1 : 0;
     }
 
     public int predict(Vector values){
         double dotProduct = values.dotProduct(weights);
         return isOverTheta(dotProduct) ? 1: 0;
     }
+
     public boolean isOverTheta(double val){
         return val > theta;
     }
@@ -46,14 +42,15 @@ public class Perceptron {
             double toAdd = error * learningRate * x.get(i);
             weights.vals.set(i, weights.get(i) + error * learningRate * x.get(i));
         }
-        //theta
         theta -= error * learningRate;
     }
+
     public void resetWeights(){
         for (int i = 0; i < size ; i++)
             weights.set(i, Math.random()*10-5);
         theta = Math.random()*10-5;
     }
+
     public Vector getWeights(){
         return weights;
     }
