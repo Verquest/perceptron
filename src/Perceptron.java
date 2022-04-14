@@ -6,10 +6,11 @@ public class Perceptron {
     private final double learningRate;
     private final int size;
     public Perceptron(int size,  double learningRate, double theta) {
+        Random random = new Random();
         ArrayList<Double> wagi = new ArrayList<>();
         for (int i = 0; i < size ; i++)
-            wagi.add(Math.random()*10-5);
-
+            wagi.add(random.nextDouble()*10-5);
+        System.out.println(wagi);
         weights = new Vector(wagi);
         this.learningRate = learningRate;
         this.theta = theta;
@@ -19,10 +20,8 @@ public class Perceptron {
     public void learn(Vector toLearn, int expectedValue){
         double dotProduct = toLearn.dotProduct(weights);
 
-        int guess = dotProduct >= theta ? 1 : 0;
-
         alterWeights(predict(toLearn), expectedValue, toLearn);
-
+        weights.normalize();
     }
 
     public int predict(Vector values){
@@ -49,6 +48,8 @@ public class Perceptron {
         for (int i = 0; i < size ; i++)
             weights.set(i, Math.random()*10-5);
         theta = Math.random()*10-5;
+        System.out.println(weights);
+        System.out.println(theta);
     }
 
     public Vector getWeights(){
